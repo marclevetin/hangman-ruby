@@ -13,11 +13,50 @@
 # Repeat until user either wins (all letters of word are selected) or loses (all letters of hangman are shown)
 
 require 'pry'
-words = ['apple', 'bear', 'castle']
-random_number = rand(words.size) + 1
+# generate word
+words = ['apple', 'bear', 'castle'] # we can expand this in the future
+random_number = rand(words.size)
+random_word = words[random_number].upcase.each_char.to_a
+random_word_size = random_word.size
 
-random_word = words[random_number]
+# build initial obfuscated_word
+obfuscated_word = []
+random_word_size.times do
+  obfuscated_word.push("_")
+end
 
-puts random_word
+# show state of current board
+puts "The current state of the board is:"
+puts obfuscated_word.join(" ")
+puts
 
+# print out outstanding letters
+total_alphabet = 'A'.upto('Z').to_a
+chosen_letters = []
+available_alphabet = total_alphabet - chosen_letters # make this a method so you don't need to regen total_alphabet
+puts "The available letters are:"
+puts available_alphabet.join(" ")
+
+binding.pry
+# need to add validation to require 1 letter only
+puts "Choose a letter"
+print "> "
+letter = gets.chomp.upcase
+
+#handle letter
+chosen_letters << letter
+available_alphabet = available_alphabet - chosen_letters
+
+# messaging
+if random_word.include?(letter)
+  puts "the letter is in the word!"
+  index = random_word.index(letter)
+  obfuscated_word[index] = letter
+elsif !random_word.include?(letter)
+  puts "the letter is not in the word!"
+else
+  puts "problem in the handle letter method"
+end
+
+# repeat
 binding.pry

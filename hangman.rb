@@ -19,6 +19,10 @@ random_number = rand(words.size)
 random_word = words[random_number].upcase.each_char.to_a
 random_word_size = random_word.size
 
+hangman = "hangman"
+missed_letters = 0
+
+
 # build initial obfuscated_word
 obfuscated_word = []
 random_word_size.times do
@@ -54,6 +58,8 @@ if random_word.include?(letter)
   obfuscated_word[index] = letter
 elsif !random_word.include?(letter)
   puts "the letter is not in the word!"
+  missed_letters += 1
+  puts hangman[missed_letters - 1]
 else
   puts "problem in the handle letter method"
 end

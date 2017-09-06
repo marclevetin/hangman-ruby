@@ -13,26 +13,63 @@
 # Repeat until user either wins (all letters of word are selected) or loses (all letters of hangman are shown)
 
 require 'pry'
-# generate word
-words = ['apple', 'bear', 'castle'] # we can expand this in the future
-random_number = rand(words.size)
-random_word = words[random_number].upcase.each_char.to_a
-random_word_size = random_word.size
 
-hangman = "hangman"
-missed_letters = 0
+class Hangman
+  def initialize
+    @hangman = "hangman"
+    @missed_letters = 0
+    @random_word = generate_word
+    @size = word_size(@random_word)
+    @board = initialize_board(@random_word)
+    @alphabet = 'A'.upto('Z').to_a
+    binding.pry
+  end
 
+  def generate_word
+    words = ['apple', 'bear', 'castle'] # we can expand this in the future
+    random_number = rand(words.size)
+    random_word = words[random_number].upcase.each_char.to_a
+  end
 
-# build initial obfuscated_word
-obfuscated_word = []
-random_word_size.times do
-  obfuscated_word.push("_")
+  def word_size(word)
+    word.size
+  end
+
+  def initialize_board(word)
+    obfuscated_word = []
+    word.size.times do
+      obfuscated_word.push("_")
+    end
+
+    obfuscated_word.join(" ")
+  end
+
+  def announce_board
+    puts "The current state of the board is:\n#{@board}"
+  end
+
+  def announce_alphabet
+    puts "The available letters are:\n#{@alphabet}"
+  end
+
+  def get_input
+    puts "Choose a letter"
+    print "> "
+    letter = gets.chomp.upcase
+    validate_input(letter)
+  end
+
+  def validate_input(letter)
+    while letter.size != 1
+      puts "Oops.  Please enter just a single letter."
+      get_input
+    end
+  end
+
 end
 
-# show state of current board
-puts "The current state of the board is:"
-puts obfuscated_word.join(" ")
-puts
+a = Hangman.new
+
 
 # print out outstanding letters
 total_alphabet = 'A'.upto('Z').to_a
@@ -43,9 +80,7 @@ puts available_alphabet.join(" ")
 
 binding.pry
 # need to add validation to require 1 letter only
-puts "Choose a letter"
-print "> "
-letter = gets.chomp.upcase
+
 
 #handle letter
 chosen_letters << letter
